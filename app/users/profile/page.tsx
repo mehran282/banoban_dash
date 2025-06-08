@@ -19,7 +19,6 @@ export default function UserProfilePage() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   )
 }

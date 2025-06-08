@@ -344,7 +344,6 @@ export default function ServicesForm() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   )
 }

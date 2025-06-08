@@ -82,7 +82,6 @@ export default function Home() {
           {/* Charts Section */}
           <ChartsSection />
         </div>
-      </div>
     </div>
   )
 }

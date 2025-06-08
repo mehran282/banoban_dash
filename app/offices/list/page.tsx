@@ -459,7 +459,6 @@ export default function OfficesList() {
         </Card>
       )}
         </div>
-      </div>
     </div>
   )
 }

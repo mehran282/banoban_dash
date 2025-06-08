@@ -415,7 +415,6 @@ export default function SpecialtiesForm() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   )
 }
