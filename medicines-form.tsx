@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Trash2, Edit, Search, ArrowUpDown, ArrowUp, ArrowDown, Eye, EyeOff } from "lucide-react"
 import { toPersianDigits, toEnglishDigits, formatPersianNumber } from "./utils/persian-utils"
-import { Header } from "./components/header"
 
 interface Medicine {
   id: string
@@ -209,10 +208,7 @@ export default function MedicinesForm() {
       let aValue: any = a[sortField]
       let bValue: any = b[sortField]
 
-      if (sortField === "createdAt") {
-        aValue = new Date(aValue).getTime()
-        bValue = new Date(bValue).getTime()
-      } else if (sortField === "price") {
+      if (sortField === "price") {
         aValue = Number(aValue)
         bValue = Number(bValue)
       } else {
@@ -231,233 +227,230 @@ export default function MedicinesForm() {
   }, [medicines, searchTerm, sortField, sortDirection])
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="md:mr-80">
-        <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
-          {/* Form */}
-          <Card>
-            <CardHeader className="card-header">
-              <CardTitle className="text-right">{editingId ? "ویرایش دارو" : "افزودن دارو جدید"}</CardTitle>
-              <CardDescription className="text-right">
-                اطلاعات دارو مورد نظر را در سیستم بانوبان وارد کنید
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-right block">
-                      نام دارو
-                    </Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="مثال: آسپرین"
-                      className="text-right"
-                      dir="rtl"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="price" className="text-right block">
-                      مبلغ (تومان)
-                    </Label>
-                    <Input
-                      id="price"
-                      type="text"
-                      value={formData.price}
-                      onChange={handlePriceChange}
-                      placeholder={`مثال: ${toPersianDigits("25000")}`}
-                      className="text-right"
-                      dir="rtl"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="usage" className="text-right block">
-                      کاربرد
-                    </Label>
-                    <Input
-                      id="usage"
-                      value={formData.usage}
-                      onChange={(e) => setFormData({ ...formData, usage: e.target.value })}
-                      placeholder="مثال: ضد درد و تب"
-                      className="text-right"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-
-                <div className="button-group">
-                  <div className="flex gap-3">
-                    <Button type="submit" className="flex-1" disabled={isLoading}>
-                      {isLoading ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          {editingId ? "در حال بروزرسانی..." : "در حال ثبت..."}
-                        </div>
-                      ) : editingId ? (
-                        "بروزرسانی"
-                      ) : (
-                        "ثبت دارو"
-                      )}
-                    </Button>
-                    {editingId && (
-                      <Button type="button" variant="outline" onClick={resetForm}>
-                        انصراف
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Medicines List */}
-          <Card>
-            <CardHeader className="card-header">
-              <CardTitle className="text-right">لیست داروها</CardTitle>
-              <CardDescription className="text-right">
-                {toPersianDigits(filteredAndSortedMedicines.length.toString())} دارو از{" "}
-                {toPersianDigits(medicines.length.toString())} دارو در سیستم بانوبان
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* Search */}
-              <div className="mb-4">
-                <div className="relative">
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+    <div className="space-y-6">
+      <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
+        {/* Form */}
+        <Card>
+          <CardHeader className="card-header">
+            <CardTitle className="text-right">{editingId ? "ویرایش دارو" : "افزودن دارو جدید"}</CardTitle>
+            <CardDescription className="text-right">
+              اطلاعات دارو مورد نظر را در سیستم بانوبان وارد کنید
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-right block">
+                    نام دارو
+                  </Label>
                   <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="مثال: آسپرین"
+                    className="text-right"
+                    dir="rtl"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="price" className="text-right block">
+                    مبلغ (تومان)
+                  </Label>
+                  <Input
+                    id="price"
                     type="text"
-                    placeholder="جستجو در کد، نام دارو یا کاربرد..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pr-10 text-right"
+                    value={formData.price}
+                    onChange={handlePriceChange}
+                    placeholder={`مثال: ${toPersianDigits("25000")}`}
+                    className="text-right"
+                    dir="rtl"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="usage" className="text-right block">
+                    کاربرد
+                  </Label>
+                  <Input
+                    id="usage"
+                    value={formData.usage}
+                    onChange={(e) => setFormData({ ...formData, usage: e.target.value })}
+                    placeholder="مثال: ضد درد و تب"
+                    className="text-right"
                     dir="rtl"
                   />
                 </div>
               </div>
 
-              {filteredAndSortedMedicines.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  {searchTerm ? "هیچ داروی مطابق با جستجو یافت نشد" : "هنوز داروی ثبت نشده است"}
+              <div className="button-group">
+                <div className="flex gap-3">
+                  <Button type="submit" className="flex-1" disabled={isLoading}>
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        {editingId ? "در حال بروزرسانی..." : "در حال ثبت..."}
+                      </div>
+                    ) : editingId ? (
+                      "بروزرسانی"
+                    ) : (
+                      "ثبت دارو"
+                    )}
+                  </Button>
+                  {editingId && (
+                    <Button type="button" variant="outline" onClick={resetForm}>
+                      انصراف
+                    </Button>
+                  )}
                 </div>
-              ) : (
-                <div className="services-table">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-right">
-                          <Button
-                            variant="ghost"
-                            onClick={() => handleSort("code")}
-                            className="h-auto p-0 font-medium hover:bg-transparent"
-                          >
-                            <div className="flex items-center gap-2">
-                              <span>کد دارو</span>
-                              {getSortIcon("code")}
-                            </div>
-                          </Button>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <Button
-                            variant="ghost"
-                            onClick={() => handleSort("name")}
-                            className="h-auto p-0 font-medium hover:bg-transparent"
-                          >
-                            <div className="flex items-center gap-2">
-                              <span>نام دارو</span>
-                              {getSortIcon("name")}
-                            </div>
-                          </Button>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <Button
-                            variant="ghost"
-                            onClick={() => handleSort("price")}
-                            className="h-auto p-0 font-medium hover:bg-transparent"
-                          >
-                            <div className="flex items-center gap-2">
-                              <span>مبلغ</span>
-                              {getSortIcon("price")}
-                            </div>
-                          </Button>
-                        </TableHead>
-                        <TableHead className="text-right">
-                          <Button
-                            variant="ghost"
-                            onClick={() => handleSort("usage")}
-                            className="h-auto p-0 font-medium hover:bg-transparent"
-                          >
-                            <div className="flex items-center gap-2">
-                              <span>کاربرد</span>
-                              {getSortIcon("usage")}
-                            </div>
-                          </Button>
-                        </TableHead>
-                        <TableHead className="text-left actions-column">عملیات</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredAndSortedMedicines.map((medicine) => (
-                        <TableRow
-                          key={medicine.id}
-                          className={`transition-opacity ${medicine.isHidden ? "opacity-50" : "opacity-100"}`}
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Medicines List */}
+        <Card>
+          <CardHeader className="card-header">
+            <CardTitle className="text-right">لیست داروها</CardTitle>
+            <CardDescription className="text-right">
+              {toPersianDigits(filteredAndSortedMedicines.length.toString())} دارو از{" "}
+              {toPersianDigits(medicines.length.toString())} دارو در سیستم بانوبان
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Search */}
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="جستجو در کد، نام دارو یا کاربرد..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pr-10 text-right"
+                  dir="rtl"
+                />
+              </div>
+            </div>
+
+            {filteredAndSortedMedicines.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                {searchTerm ? "هیچ داروی مطابق با جستجو یافت نشد" : "هنوز داروی ثبت نشده است"}
+              </div>
+            ) : (
+              <div className="services-table">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right">
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleSort("code")}
+                          className="h-auto p-0 font-medium hover:bg-transparent"
                         >
-                          <TableCell className="font-medium text-right">{medicine.code}</TableCell>
-                          <TableCell className="font-medium text-right">{medicine.name}</TableCell>
-                          <TableCell className="text-right">{formatPersianNumber(medicine.price)} تومان</TableCell>
-                          <TableCell className="text-right">
-                            <Badge variant="secondary" className="text-xs">
-                              {medicine.usage}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="actions-column">
-                            <div className="button-group">
-                              <div className="flex items-center gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => toggleHidden(medicine.id)}
-                                  title={medicine.isHidden ? "نمایش" : "مخفی کردن"}
-                                  disabled={isLoading}
-                                >
-                                  {medicine.isHidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-                                </Button>
+                          <div className="flex items-center gap-2">
+                            <span>کد دارو</span>
+                            {getSortIcon("code")}
+                          </div>
+                        </Button>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleSort("name")}
+                          className="h-auto p-0 font-medium hover:bg-transparent"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span>نام دارو</span>
+                            {getSortIcon("name")}
+                          </div>
+                        </Button>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleSort("price")}
+                          className="h-auto p-0 font-medium hover:bg-transparent"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span>مبلغ</span>
+                            {getSortIcon("price")}
+                          </div>
+                        </Button>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleSort("usage")}
+                          className="h-auto p-0 font-medium hover:bg-transparent"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span>کاربرد</span>
+                            {getSortIcon("usage")}
+                          </div>
+                        </Button>
+                      </TableHead>
+                      <TableHead className="text-left actions-column">عملیات</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredAndSortedMedicines.map((medicine) => (
+                      <TableRow
+                        key={medicine.id}
+                        className={`transition-opacity ${medicine.isHidden ? "opacity-50" : "opacity-100"}`}
+                      >
+                        <TableCell className="font-medium text-right">{medicine.code}</TableCell>
+                        <TableCell className="font-medium text-right">{medicine.name}</TableCell>
+                        <TableCell className="text-right">{formatPersianNumber(medicine.price)} تومان</TableCell>
+                        <TableCell className="text-right">
+                          <Badge variant="secondary" className="text-xs">
+                            {medicine.usage}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="actions-column">
+                          <div className="button-group">
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => toggleHidden(medicine.id)}
+                                title={medicine.isHidden ? "نمایش" : "مخفی کردن"}
+                                disabled={isLoading}
+                              >
+                                {medicine.isHidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                              </Button>
 
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleEdit(medicine)}
-                                  title="ویرایش"
-                                  disabled={isLoading}
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleEdit(medicine)}
+                                title="ویرایش"
+                                disabled={isLoading}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
 
-                                <Button
-                                  size="sm"
-                                  variant="destructive"
-                                  onClick={() => handleDelete(medicine.id)}
-                                  title="حذف"
-                                  disabled={isLoading}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDelete(medicine.id)}
+                                title="حذف"
+                                disabled={isLoading}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

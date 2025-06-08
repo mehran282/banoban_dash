@@ -1,14 +1,12 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Header } from "../../../components/header"
+
 
 export default function UserProfilePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="md:mr-80">
-        <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
+    <div className="space-y-6">
+      <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
           <Card>
             <CardHeader>
               <CardTitle className="text-right">مدیریت پروفایل کاربران</CardTitle>

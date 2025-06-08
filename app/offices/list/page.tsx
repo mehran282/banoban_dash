@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Building, MapPin, Phone, Search, Plus, Eye, Edit, Stethoscope, Scale, MessageCircle } from "lucide-react"
-import { Header } from "@/components/header"
+
 
 // Utility function برای تبدیل اعداد انگلیسی به فارسی
 const toPersianNumber = (num: number | string): string => {
@@ -166,10 +166,8 @@ export default function OfficesList() {
   const provinces = Array.from(new Set(offices.map(office => office.province)))
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="md:mr-80">
-        <div className="container mx-auto p-6 space-y-6" dir="rtl" style={{ fontFamily: 'Vazirmatn, Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
+    <div className="space-y-6">
+      <div className="container mx-auto p-6 space-y-6" dir="rtl" style={{ fontFamily: 'Vazirmatn, Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
           {/* Header */}
           <div className="flex justify-between items-center">
             <div>

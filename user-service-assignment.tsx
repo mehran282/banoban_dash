@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Trash2, Edit, Users, Settings } from "lucide-react"
-import { Header } from "./components/header"
+
 import { SearchableList } from "./components/searchable-list"
 import { toPersianDigits, formatPersianNumber } from "./utils/persian-utils"
 
@@ -248,9 +248,7 @@ export default function UserServiceAssignment() {
     }))
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="md:mr-80">
+    <div className="space-y-6">
         <div className="max-w-7xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
           {/* Assignment Form */}
           <Card>
@@ -401,7 +399,6 @@ export default function UserServiceAssignment() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   )
 }

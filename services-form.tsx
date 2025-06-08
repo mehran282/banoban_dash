@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Trash2, Edit, Eye, EyeOff, Users, Monitor } from "lucide-react"
 import { toPersianDigits, toEnglishDigits, formatPersianNumber } from "./utils/persian-utils"
 import { ThreeWaySwitch } from "./components/three-way-switch"
-import { Header } from "./components/header"
+
 
 interface Service {
   id: string
@@ -177,10 +177,8 @@ export default function ServicesForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="md:mr-80">
-        <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
+    <div className="space-y-6">
+      <div className="max-w-6xl mx-auto p-6 space-y-6 font-vazir" dir="rtl">
           {/* Form */}
           <Card>
             <CardHeader className="card-header">
