@@ -20,6 +20,16 @@ import {
   IdCard, GraduationCap, Award, Briefcase
 } from "lucide-react"
 
+// اضافه کردن فونت Vazirmatn از CDN
+const loadFont = () => {
+  if (typeof window !== 'undefined') {
+    const link = document.createElement('link')
+    link.href = 'https://cdn.jsdelivr.net/npm/vazirmatn@33.003.0/Vazirmatn-Variable-font-face.css'
+    link.rel = 'stylesheet'
+    document.head.appendChild(link)
+  }
+}
+
 // Utility function برای تبدیل اعداد انگلیسی به فارسی
 const toPersianNumber = (num: number | string): string => {
   const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
@@ -156,6 +166,7 @@ export default function OfficeProfile() {
 
   useEffect(() => {
     setMounted(true)
+    loadFont()
   }, [])
 
   const getTypeIcon = (type: string) => {
@@ -321,7 +332,7 @@ export default function OfficeProfile() {
       </Card>
 
       {/* Tabs */}
-      <Tabs defaultValue="basic" className="w-full">
+      <Tabs defaultValue="basic" className="w-full" dir="rtl">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="basic" className="flex items-center gap-2">
             <Building className="h-4 w-4" />
@@ -340,8 +351,8 @@ export default function OfficeProfile() {
         {/* Basic Information Tab */}
         <TabsContent value="basic" className="space-y-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
+            <CardHeader className="flex flex-row items-center justify-between" dir="rtl">
+              <div className="text-right">
                 <CardTitle>اطلاعات پایه</CardTitle>
                 <CardDescription>اطلاعات اساسی دفتر</CardDescription>
               </div>
@@ -358,7 +369,7 @@ export default function OfficeProfile() {
               {editingSection === 'basic' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label>نام دفتر</Label>
+                    <Label className="text-right">نام دفتر</Label>
                     <Input
                       value={office.title}
                       onChange={(e) => setOffice(prev => ({ ...prev, title: e.target.value }))}
@@ -367,7 +378,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>نام مالک</Label>
+                    <Label className="text-right">نام مالک</Label>
                     <Input
                       value={office.owner}
                       onChange={(e) => setOffice(prev => ({ ...prev, owner: e.target.value }))}
@@ -376,7 +387,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>شماره تماس</Label>
+                    <Label className="text-right">شماره تماس</Label>
                     <Input
                       value={office.phone}
                       onChange={(e) => setOffice(prev => ({ ...prev, phone: e.target.value }))}
@@ -385,7 +396,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>ایمیل</Label>
+                    <Label className="text-right">ایمیل</Label>
                     <Input
                       value={office.email}
                       onChange={(e) => setOffice(prev => ({ ...prev, email: e.target.value }))}
@@ -394,23 +405,23 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>استان</Label>
+                    <Label className="text-right">استان</Label>
                     <Select
                       value={office.province}
                       onValueChange={(value) => setOffice(prev => ({ ...prev, province: value }))}
                     >
-                      <SelectTrigger dir="rtl">
-                        <SelectValue />
+                      <SelectTrigger dir="rtl" className="text-right">
+                        <SelectValue className="text-right" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent dir="rtl">
                         {provinces.map(province => (
-                          <SelectItem key={province} value={province}>{province}</SelectItem>
+                          <SelectItem key={province} value={province} className="text-right">{province}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>شهر</Label>
+                    <Label className="text-right">شهر</Label>
                     <Input
                       value={office.city}
                       onChange={(e) => setOffice(prev => ({ ...prev, city: e.target.value }))}
@@ -419,7 +430,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label>آدرس کامل</Label>
+                    <Label className="text-right">آدرس کامل</Label>
                     <Textarea
                       value={office.address}
                       onChange={(e) => setOffice(prev => ({ ...prev, address: e.target.value }))}
@@ -428,7 +439,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>کد پستی</Label>
+                    <Label className="text-right">کد پستی</Label>
                     <Input
                       value={office.postalCode}
                       onChange={(e) => setOffice(prev => ({ ...prev, postalCode: e.target.value }))}
@@ -437,7 +448,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>شماره پروانه</Label>
+                    <Label className="text-right">شماره پروانه</Label>
                     <Input
                       value={office.licenseNumber}
                       onChange={(e) => setOffice(prev => ({ ...prev, licenseNumber: e.target.value }))}
@@ -446,7 +457,7 @@ export default function OfficeProfile() {
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label>توضیحات</Label>
+                    <Label className="text-right">توضیحات</Label>
                     <Textarea
                       value={office.description}
                       onChange={(e) => setOffice(prev => ({ ...prev, description: e.target.value }))}
@@ -455,63 +466,63 @@ export default function OfficeProfile() {
                       rows={4}
                     />
                   </div>
-                  <div className="md:col-span-2 flex justify-end gap-2">
+                  <div className="md:col-span-2 flex justify-start gap-2" dir="rtl">
+                    <Button onClick={handleSaveBasicInfo}>
+                      <Save className="h-4 w-4 mr-1" />
+                      ذخیره
+                    </Button>
                     <Button variant="outline" onClick={() => setEditingSection(null)}>
                       لغو
-                    </Button>
-                    <Button onClick={handleSaveBasicInfo}>
-                      <Save className="h-4 w-4 ml-1" />
-                      ذخیره
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6" dir="rtl">
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">نام دفتر</p>
                     <p className="font-medium">{office.title}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">نام مالک</p>
                     <p className="font-medium">{office.owner}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">شماره تماس</p>
                     <p className="font-medium">{office.phone}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">ایمیل</p>
                     <p className="font-medium">{office.email}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">استان</p>
                     <p className="font-medium">{office.province}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">شهر</p>
                     <p className="font-medium">{office.city}</p>
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="md:col-span-2 text-right">
                     <p className="text-sm text-gray-600">آدرس کامل</p>
                     <p className="font-medium">{office.address}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">کد پستی</p>
                     <p className="font-medium">{office.postalCode}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">شماره پروانه</p>
                     <p className="font-medium">{office.licenseNumber}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">سال تاسیس</p>
                     <p className="font-medium">{office.establishedYear}</p>
                   </div>
-                  <div>
+                  <div className="text-right">
                     <p className="text-sm text-gray-600">تاریخ ثبت</p>
                     <p className="font-medium">{office.registrationDate}</p>
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="md:col-span-2 text-right">
                     <p className="text-sm text-gray-600">توضیحات</p>
                     <p className="font-medium leading-relaxed">{office.description}</p>
                   </div>
@@ -524,8 +535,8 @@ export default function OfficeProfile() {
         {/* Documents Tab */}
         <TabsContent value="documents" className="space-y-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
+            <CardHeader className="flex flex-row items-center justify-between" dir="rtl">
+              <div className="text-right">
                 <CardTitle>مدارک و اسناد</CardTitle>
                 <CardDescription>مدارک بارگذاری شده برای این دفتر</CardDescription>
               </div>
@@ -557,7 +568,7 @@ export default function OfficeProfile() {
                       className="w-full"
                       variant="outline"
                     >
-                      <Upload className="h-4 w-4 ml-2" />
+                      <Upload className="h-4 w-4 mr-2" />
                       انتخاب فایل
                     </Button>
                   </div>
@@ -565,7 +576,7 @@ export default function OfficeProfile() {
               </Dialog>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" dir="rtl">
                 {office.documents.map((document) => (
                   <Card key={document.id} className="p-4">
                     <div className="flex items-start justify-between mb-3">
@@ -630,7 +641,7 @@ export default function OfficeProfile() {
                   <h3 className="text-lg font-medium text-gray-900 mb-2">مدرکی بارگذاری نشده</h3>
                   <p className="text-gray-600 mb-6">برای شروع، اولین مدرک را بارگذاری کنید.</p>
                   <Button onClick={() => setUploadDialogOpen(true)}>
-                    <Plus className="h-4 w-4 ml-1" />
+                    <Plus className="h-4 w-4 mr-1" />
                     بارگذاری مدرک
                   </Button>
                 </div>
@@ -642,8 +653,8 @@ export default function OfficeProfile() {
         {/* Schedule Tab */}
         <TabsContent value="schedule" className="space-y-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
+            <CardHeader className="flex flex-row items-center justify-between" dir="rtl">
+              <div className="text-right">
                 <CardTitle>برنامه زمان‌بندی</CardTitle>
                 <CardDescription>ساعات کاری هفتگی دفتر</CardDescription>
               </div>
@@ -657,10 +668,10 @@ export default function OfficeProfile() {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-4" dir="rtl">
                 {office.schedule.map((slot) => (
-                  <div key={slot.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
+                                      <div key={slot.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-4 text-right">
                       {editingSection === 'schedule' ? (
                         <>
                           <input
@@ -728,13 +739,13 @@ export default function OfficeProfile() {
                 ))}
                 
                 {editingSection === 'schedule' && (
-                  <div className="flex justify-end gap-2 pt-4">
+                  <div className="flex justify-start gap-2 pt-4" dir="rtl">
+                    <Button onClick={handleSaveSchedule}>
+                      <Save className="h-4 w-4 mr-1" />
+                      ذخیره
+                    </Button>
                     <Button variant="outline" onClick={() => setEditingSection(null)}>
                       لغو
-                    </Button>
-                    <Button onClick={handleSaveSchedule}>
-                      <Save className="h-4 w-4 ml-1" />
-                      ذخیره
                     </Button>
                   </div>
                 )}

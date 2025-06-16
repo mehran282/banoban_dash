@@ -9,8 +9,17 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Building, MapPin, Phone, Search, Plus, Eye, Edit, Stethoscope, Scale, MessageCircle } from "lucide-react"
+import { Building, MapPin, Phone, Search, Plus, Eye, Stethoscope, Scale, MessageCircle, CheckCircle, Clock, XCircle } from "lucide-react"
 
+// اضافه کردن فونت Vazirmatn از CDN
+const loadFont = () => {
+  if (typeof window !== 'undefined') {
+    const link = document.createElement('link')
+    link.href = 'https://cdn.jsdelivr.net/npm/vazirmatn@33.003.0/Vazirmatn-Variable-font-face.css'
+    link.rel = 'stylesheet'
+    document.head.appendChild(link)
+  }
+}
 
 // Utility function برای تبدیل اعداد انگلیسی به فارسی
 const toPersianNumber = (num: number | string): string => {
@@ -32,6 +41,7 @@ interface Office {
   registrationDate: string
   documentsCount: number
   usersCount: number
+  reservationsCount: number
 }
 
 // Mock data
@@ -48,7 +58,8 @@ const mockOffices: Office[] = [
     status: "active",
     registrationDate: "۱۴۰۳/۰۳/۱۵",
     documentsCount: 5,
-    usersCount: 3
+    usersCount: 3,
+    reservationsCount: 25
   },
   {
     id: "2", 
@@ -62,7 +73,8 @@ const mockOffices: Office[] = [
     status: "active",
     registrationDate: "۱۴۰۳/۰۲/۲۰",
     documentsCount: 8,
-    usersCount: 2
+    usersCount: 2,
+    reservationsCount: 18
   },
   {
     id: "3",
@@ -76,7 +88,8 @@ const mockOffices: Office[] = [
     status: "pending",
     registrationDate: "۱۴۰۳/۰۴/۰۱",
     documentsCount: 6,
-    usersCount: 1
+    usersCount: 1,
+    reservationsCount: 12
   },
   {
     id: "4",
@@ -90,7 +103,8 @@ const mockOffices: Office[] = [
     status: "active",
     registrationDate: "۱۴۰۳/۰۱/۱۰",
     documentsCount: 7,
-    usersCount: 4
+    usersCount: 4,
+    reservationsCount: 32
   },
   {
     id: "5",
@@ -104,7 +118,8 @@ const mockOffices: Office[] = [
     status: "suspended",
     registrationDate: "۱۴۰۳/۰۲/۰۵",
     documentsCount: 4,
-    usersCount: 1
+    usersCount: 1,
+    reservationsCount: 8
   }
 ]
 
@@ -114,11 +129,11 @@ export default function OfficesList() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
-  const [filterProvince, setFilterProvince] = useState<string>("all")
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    loadFont()
   }, [])
 
   const getTypeIcon = (type: string) => {
@@ -139,16 +154,16 @@ export default function OfficesList() {
     }
   }
 
-  const getStatusBadge = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">فعال</Badge>
+        return <CheckCircle className="h-5 w-5 text-green-600" />
       case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">در انتظار تایید</Badge>
+        return <Clock className="h-5 w-5 text-yellow-600" />
       case 'suspended':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">تعلیق شده</Badge>
+        return <XCircle className="h-5 w-5 text-red-600" />
       default:
-        return <Badge variant="secondary">نامشخص</Badge>
+        return <div className="h-5 w-5 bg-gray-400 rounded-full"></div>
     }
   }
 
@@ -158,19 +173,16 @@ export default function OfficesList() {
                          office.address.includes(searchTerm)
     const matchesType = !filterType || filterType === "all" || office.type === filterType
     const matchesStatus = !filterStatus || filterStatus === "all" || office.status === filterStatus
-    const matchesProvince = !filterProvince || filterProvince === "all" || office.province === filterProvince
 
-    return matchesSearch && matchesType && matchesStatus && matchesProvince
+    return matchesSearch && matchesType && matchesStatus
   })
 
-  const provinces = Array.from(new Set(offices.map(office => office.province)))
-
   return (
-    <div className="space-y-6">
-      <div className="container mx-auto p-6 space-y-6" dir="rtl" style={{ fontFamily: 'Vazirmatn, Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
+    <div className="space-y-6" style={{ fontFamily: 'Vazirmatn, sans-serif' }}>
+      <div className="container mx-auto p-6 space-y-6" dir="rtl">
           {/* Header */}
           <div className="flex justify-between items-center">
-            <div>
+            <div className="text-right">
               <h1 className="text-3xl font-bold text-gray-900">لیست دفاتر</h1>
               <p className="text-gray-600 mt-2">مدیریت و مشاهده تمام دفاتر ثبت شده</p>
             </div>
@@ -243,11 +255,11 @@ export default function OfficesList() {
         </Card>
       </div>
 
-      {/* Filters */}
+      {/* Filters - حذف فیلتر استان */}
       <Card>
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-1">
               <div className="relative">
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
@@ -261,38 +273,26 @@ export default function OfficesList() {
             </div>
             
             <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger dir="rtl">
-                <SelectValue placeholder="نوع دفتر" />
+              <SelectTrigger dir="rtl" className="text-right">
+                <SelectValue placeholder="نوع دفتر" className="text-right" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">همه انواع</SelectItem>
-                <SelectItem value="doctor">پزشک</SelectItem>
-                <SelectItem value="consultant">مشاور</SelectItem>
-                <SelectItem value="expert">کارشناس</SelectItem>
+              <SelectContent dir="rtl">
+                <SelectItem value="all" className="text-right">همه انواع</SelectItem>
+                <SelectItem value="doctor" className="text-right">پزشک</SelectItem>
+                <SelectItem value="consultant" className="text-right">مشاور</SelectItem>
+                <SelectItem value="expert" className="text-right">کارشناس</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger dir="rtl">
-                <SelectValue placeholder="وضعیت" />
+              <SelectTrigger dir="rtl" className="text-right">
+                <SelectValue placeholder="وضعیت" className="text-right" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">همه وضعیت‌ها</SelectItem>
-                <SelectItem value="active">فعال</SelectItem>
-                <SelectItem value="pending">در انتظار تایید</SelectItem>
-                <SelectItem value="suspended">تعلیق شده</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={filterProvince} onValueChange={setFilterProvince}>
-              <SelectTrigger dir="rtl">
-                <SelectValue placeholder="استان" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">همه استان‌ها</SelectItem>
-                {provinces.map(province => (
-                  <SelectItem key={province} value={province}>{province}</SelectItem>
-                ))}
+              <SelectContent dir="rtl">
+                <SelectItem value="all" className="text-right">همه وضعیت‌ها</SelectItem>
+                <SelectItem value="active" className="text-right">فعال</SelectItem>
+                <SelectItem value="pending" className="text-right">در انتظار تایید</SelectItem>
+                <SelectItem value="suspended" className="text-right">تعلیق شده</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -323,11 +323,11 @@ export default function OfficesList() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="text-right">
-                        <h3 className="font-bold text-lg">{office.title}</h3>
+                        <h3 className="font-bold text-lg truncate">{office.title}</h3>
                         <p className="text-sm text-gray-600">{office.owner}</p>
                       </div>
                     </div>
-                    {getStatusBadge(office.status)}
+                    {getStatusIcon(office.status)}
                   </div>
 
                   {/* Type */}
@@ -338,15 +338,19 @@ export default function OfficesList() {
 
                   {/* Contact Info */}
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 justify-end">
-                      <span className="text-sm text-gray-600">{office.phone}</span>
-                      <Phone className="h-4 w-4 text-gray-400" />
+                    <div className="w-full text-right" dir="rtl">
+                      <div className="flex items-center gap-2 justify-start">
+                        <Phone className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm text-gray-600">{office.phone}</span>
+                      </div>
                     </div>
-                    <div className="flex items-start gap-2 justify-end">
-                      <span className="text-sm text-gray-600 text-right leading-relaxed">
-                        {office.address}
-                      </span>
-                      <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div className="w-full text-right" dir="rtl">
+                      <div className="flex items-start gap-2 justify-start">
+                        <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <div className="text-sm text-gray-600 leading-relaxed text-right flex-1">
+                          {office.address}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -361,30 +365,21 @@ export default function OfficesList() {
                       <p className="text-sm font-medium">{toPersianNumber(office.documentsCount)}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">کاربران</p>
-                      <p className="text-sm font-medium">{toPersianNumber(office.usersCount)}</p>
+                      <p className="text-xs text-gray-500">نوبت‌ها</p>
+                      <p className="text-sm font-medium">{toPersianNumber(office.reservationsCount)}</p>
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2 pt-4">
+                  {/* Actions - فقط دکمه مشاهده پروفایل */}
+                  <div className="pt-4">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 text-sm"
+                      className="w-full text-sm"
                       onClick={() => router.push(`/offices/${office.id}`)}
                     >
                       <Eye className="h-4 w-4 ml-1" />
                       مشاهده پروفایل
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 text-sm"
-                      onClick={() => router.push(`/offices/${office.id}/edit`)}
-                    >
-                      <Edit className="h-4 w-4 ml-1" />
-                      ویرایش
                     </Button>
                   </div>
                 </div>
@@ -427,9 +422,8 @@ export default function OfficesList() {
                       <div className="h-3 bg-gray-200 rounded w-4 mx-auto"></div>
                     </div>
                   </div>
-                  <div className="flex gap-2 pt-4">
-                    <div className="h-8 bg-gray-200 rounded flex-1"></div>
-                    <div className="h-8 bg-gray-200 rounded flex-1"></div>
+                  <div className="pt-4">
+                    <div className="h-8 bg-gray-200 rounded w-full"></div>
                   </div>
                 </div>
               </CardContent>
@@ -451,7 +445,6 @@ export default function OfficesList() {
               setSearchTerm("")
               setFilterType("all")
               setFilterStatus("all")
-              setFilterProvince("all")
             }}>
               پاک کردن فیلترها
             </Button>
